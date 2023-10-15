@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+
+class DialogUtils{
+
+  static void showLoadingDialog(BuildContext context,
+      String message){
+    showDialog(context: context,
+        builder: (buildContext){
+          return AlertDialog(
+            content: Row(
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 12,),
+                Text(message)
+              ],
+            ),
+          );
+        },barrierDismissible: false
+    );
+  }
+  static void hideDialog(BuildContext context){
+    Navigator.pop(context);
+  }
+  static void showMessage(BuildContext context,
+      String message, {
+        String? postActionName,
+        VoidCallback? posAction,
+        String? negActionName,
+        VoidCallback? negAction,
+        bool dismissible = true
+      }){
+    List<Widget> actions = [];
+    if(negActionName!=null){
+      actions.add(TextButton(onPressed: (){
+        Navigator.pop(context);
+        negAction?.call();
+      },
+          child: Text(negActionName)));
+    } if(postActionName!=null){
+      actions.add(TextButton(onPressed: (){
+        Navigator.pop(context);
+        posAction?.call();
+      },
+          child: Text(postActionName)));
+    }
+
+    showDialog(context: context,
+        builder: (buildContext){
+          return AlertDialog(
+              content: Text(message),
+              actions: actions
+          );
+        },
+        barrierDismissible: dismissible
+    );
+  }
+}
